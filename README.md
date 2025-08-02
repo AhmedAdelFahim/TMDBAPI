@@ -1,5 +1,9 @@
 # TMDB
-## Run the app without docker
+## Database Schema
+<img src='./database-schema.png'/> 
+
+## Setup
+### Run the app without docker
 
 ```bash
 $ npm i
@@ -9,7 +13,7 @@ $ npm run start
 $ npm run test:e2e # to run test
 # you can use open http://localhost:9000/docs for docs
 ```
-## Run the app with docker
+### Run the app with docker
 
 ```bash
 $ cp .env.sample .env
@@ -24,3 +28,4 @@ $ docker-compose exec tmdb_app npm run migrate:all
 * nestjs
 * postgres
 * redis
+* knexjs
