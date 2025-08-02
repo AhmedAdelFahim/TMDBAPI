@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  tmdb_db:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - tmdb_data:/data/db
+      - ./create_database.sql:/docker-entrypoint-initdb.d/create-database.sql
+
+  tmdb_redis:
+    container_name: tmdb_redis
+    restart: always
+    image: redis:latest
+    volumes:
+      - tmdb_redis:/data
+
+  tmdb_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 9002:9002
+    depends_on:
+      - tmdb_db
+      - tmdb_redis
+    restart: always
+    environment:
+      DB_URL: postgres://postgres:postgres@tmdb_db:5432/tmdb
+      PORT: 9002
+      REDIS_URL: redis://tmdb_redis:6379
+      TOKEN_SECRET: "${TOKEN_SECRET}"
+      TMDB_API_KEY: "${TMDB_API_KEY}"
+volumes:
+  tmdb_data:
+  tmdb_redis:
